@@ -11,7 +11,7 @@ const logger = require('./src/logger/logger');
 const { ENDPOINT_NOT_FOUND_ERR } = require('./src/middlewares/errors/errors');
 const { errorHandler } = require('./src/middlewares/errors/errorMiddleware');
 var cron = require('node-cron');
-
+// const Sequelize=require('./database/connection');
 const PORT = 6400;
 const moment = require('moment');
 // const { Server } = require("socket.io");
@@ -49,7 +49,7 @@ app.use('/api/v1', router_v1);
 // app.use('/api/', router);
 
 app.get('/app_info', async (req, res) => {
-    let db_status = await db.User.findOne({});
+    let db_status = await sequelize.query("select 1+1");
     let asia = moment().tz('Asia/Kolkata').format("YYYY-MM-DD HH:mm:ss");
     let utc = moment().utc().format("YYYY-MM-DD HH:mm:ss");
     console.log("===========>>");

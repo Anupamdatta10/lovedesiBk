@@ -25,16 +25,16 @@ let loggerSettings = {
         logFormat
     ),
     transports: [
-        //new winston.transports.Console(),
+        new winston.transports.Console(),
         // new winston.transports.File({ filename: 'combined.log' })
         // Logs on CloudWatch
-        new CloudWatchLogsTransport({
-            logGroupName: `${pjson.name}_${EV.PROJECT_ENVIROMENT}_app_LG`,
-            logStreamName: `${new Date().toISOString().split('T')[0]}_LS`,
-            awsAccessKeyId: EV.ACCESS_KEY_ID,
-            awsSecretKey: EV.SECRECT_ACCESS_KEY,
-            awsRegion: EV.REGION
-        })
+        // new CloudWatchLogsTransport({
+        //     logGroupName: `${pjson.name}_${EV.PROJECT_ENVIROMENT}_app_LG`,
+        //     logStreamName: `${new Date().toISOString().split('T')[0]}_LS`,
+        //     awsAccessKeyId: EV.ACCESS_KEY_ID,
+        //     awsSecretKey: EV.SECRECT_ACCESS_KEY,
+        //     awsRegion: EV.REGION
+        // })
     ]
 }
 
