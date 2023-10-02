@@ -17,7 +17,7 @@ module.exports = sequelize.define(
         allowNull: false,
         type: Sequelize.STRING
     },
-    image_url: {
+    img_url: {
         type: Sequelize.TEXT
     },
     lat: {

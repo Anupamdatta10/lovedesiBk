@@ -5,6 +5,7 @@ const userRouter = require('./users/userRouter');
 const userDetailsRouter = require('./users/userDetailsRouter');
 const storeDetailsRouter = require('./stores/storeDetails');
 const bookingDetailsRouter = require('./booking/bookingDetailsRouter');
+const catagoryRouter = require('./catagory/catagoryRouter');
 const { authenticate } = require('../controllers/middlewares/middlewareController');
 
 const adminUserRouter = require('./users/adminUserRouter');
@@ -22,6 +23,8 @@ router.use((req, res, next) => {
 
 router.use('/users', userRouter);
 router.use('/admin', authenticate, adminUserRouter);
+router.use('/store_details', storeDetailsRouter);
+router.use('/catagory', catagoryRouter);
 router.use('/users_details', userDetailsRouter);
 router.use('/store', authenticate, storeDetailsRouter);
 router.use('/booking', bookingDetailsRouter);
