@@ -11,12 +11,27 @@ exports.CatagoryData = async (params, next) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         params = params.data;
+        let data={}
+        data["image_url"]=JSON.parse(JSON.stringify(params.image_url));
+        delete params.image_url;
         let dataExist = await db.Catagory.findOne({ where: { name: params.name } });
         if (dataExist) {
             logger.info("*** Ending %s of %s ***", getName().functionName, getName().fileName);
             return { success: false, data: [], message: "already exist!","status": 400  }
         } else {
             let results = await db.Catagory.create(params);
+            let id = JSON.parse(JSON.stringify(results)).id;
+            if (results && data.image_url) {
+                idxDot = data.image_url.file_name.lastIndexOf(".");
+                extFile = data.image_url.file_name.substr(idxDot, data.image_url.file_name.length).toLowerCase();
+                let org_name = id + "_" + moment().format('YYYYMMDDSSsss') + extFile;
+                var buffer = data.image_url.file_obj.split(',');
+                var buffer_str = Buffer.from(buffer[1], 'base64');
+    
+                let upload_link = await s3.uploadToS3(buffer_str, 'Catagory_images', org_name);
+                var imageHash = JSON.stringify({ "file_name": data.image_url.file_name, "img_url": upload_link });
+                await db.Catagory.update({ "image_url": imageHash }, { where: { id: id } });
+            }
             logger.info("*** Ending %s of %s ***", getName().functionName, getName().fileName);
             return { success: true, data: results }
         }
@@ -99,10 +114,27 @@ exports.CatagoryUpdateData = async (params, userId, org_id, next) => {
     try {
         let id = params.id;
         params = params.data;
+        let data={}
+        if(params.hasOwnProperty('image_url')){
+            data["image_url"]=JSON.parse(JSON.stringify(params.image_url));
+            delete params.image_url;
+        }
         let dataExist = await db.Catagory.findOne({ where: { id: id } });
         if (dataExist != null) {
 
             let results = await db.Catagory.update(params, { where: { id: id } });
+
+            if (results && data.image_url) {
+                idxDot = data.image_url.file_name.lastIndexOf(".");
+                extFile = data.image_url.file_name.substr(idxDot, data.image_url.file_name.length).toLowerCase();
+                let org_name = id + "_" + moment().format('YYYYMMDDSSsss') + extFile;
+                var buffer = data.image_url.file_obj.split(',');
+                var buffer_str = Buffer.from(buffer[1], 'base64');
+    
+                let upload_link = await s3.uploadToS3(buffer_str, 'Catagory_images', org_name);
+                var imageHash = JSON.stringify({ "file_name": data.image_url.file_name, "img_url": upload_link });
+                await db.Catagory.update({ "image_url": imageHash }, { where: { id: id } });
+            }
             if (results[0] == 0) {
                 logger.error("*** Error in %s of %s ***", getName().functionName, getName().fileName);
                 return ({ "message": "Update Can Not Be Performed", "success": false, "status": 405 })
