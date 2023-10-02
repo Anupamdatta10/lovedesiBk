@@ -9,9 +9,10 @@ exports.validateUserDetailsCreate = (req, next) => {
         let data = req;
         let data_validate = {};
 
-        data_validate['template_name'] = Joi.string().required();
-        data_validate['template_type'] = Joi.string().required();
-        data_validate['template'] = Joi.string().required();
+        data_validate['address'] = Joi.string();
+        //data_validate['img_url'] = Joi.string();
+        data_validate['user_id'] = Joi.string().required();
+        data_validate['status'] = Joi.string();
 
         let schemas = Joi.object().keys(data_validate);
         let validation = schemas.validate(data);
@@ -37,7 +38,7 @@ exports.formatResponseUserDetailsCreateData = (params) => {
             result = {
                 "status": 200,
                 "success": true,
-                "message": "Template created successfully",
+                "message": "User Details created successfully",
                 "data": params.data
             };
             logger.info("* Ending %s of %s *", getName().functionName, getName().fileName);
@@ -148,9 +149,10 @@ exports.validateUserDetailsUpdateData = (req, next) => {
         let data = req.body;
         let id = req.params.id;
         let data_validate = {};
-        data_validate['template_name'] = Joi.string().required();
-        data_validate['template_type'] = Joi.string().required();
-        data_validate['template'] = Joi.string().required();
+        data_validate['address'] = Joi.string();
+        //data_validate['img_url'] = Joi.string();
+        data_validate['user_id'] = Joi.string().required();
+        data_validate['status'] = Joi.string();
 
 
         let schemas = Joi.object().keys(data_validate);

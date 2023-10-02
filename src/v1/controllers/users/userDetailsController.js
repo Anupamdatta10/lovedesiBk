@@ -23,11 +23,11 @@ const { getName } = require('../../../logger/logFunctionName');
 exports.userDetailsCreateController = async (req, res, next) => {
     logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
     try {
-        const currentCognitoUserDetails = req.currentUser;
-        let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
-        let currentUserId = userParams.user_id;
+        //const currentCognitoUserDetails = req.currentUser;
+        //let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
+        //let currentUserId = userParams.user_id;
         let data = req.body;
-        let org_id = userParams.org_id;
+        //let org_id = userParams.org_id;
         let isArray = Array.isArray(data);
         if (isArray) {
             if (data.length > 0) {
@@ -37,9 +37,9 @@ exports.userDetailsCreateController = async (req, res, next) => {
                     const validData = validateUserDetailsCreate(reqData, next);
                     logger.info("%s validparams got success response true: %s", getName().functionName, JSON.stringify(validData));
                     if (validData.success) {
-                        let template = await userDetailsData(validData, currentUserId, org_id, next);
-                        if (template) {
-                            let responseData = formatResponseUserDetailsCreateData(template);
+                        let userDetails = await userDetailsData(validData, next);
+                        if (userDetails) {
+                            let responseData = formatResponseUserDetailsCreateData(userDetails);
                             if (responseData.success == true) {
                                 var responseTrue = {
                                     "success": responseData.success,
@@ -95,14 +95,14 @@ exports.userDetailsCreateController = async (req, res, next) => {
 exports.userDetailsListController = async (req, res, next) => {
     logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
     try {
-        const currentCognitoUserDetails = req.currentUser;
-        let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
-        let currentUserId = userParams.user_id;
-        let org_id = userParams.org_id;
+        // const currentCognitoUserDetails = req.currentUser;
+        // let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
+        // let currentUserId = userParams.user_id;
+        // let org_id = userParams.org_id;
         const validDatas = await validateUserDetailsListData(req, next);
         logger.info("%s validparams got success response true: %s", getName().functionName, JSON.stringify(validDatas));
         if (validDatas.success) {
-            let userDetailsData = await userDetailsListData(validDatas, org_id, next);
+            let userDetailsData = await userDetailsListData(validDatas, next);
             if (userDetailsData) {
                 let responseData = await formatResponseUserDetailsListData(userDetailsData);
                 if (responseData.success) {
@@ -126,14 +126,14 @@ exports.userDetailsListController = async (req, res, next) => {
 exports.userDetailsUpdateController = async (req, res, next) => {
     logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
     try {
-        let currentCognitoUserDetails = req.currentUser;
-        let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
-        let user_id = userParams.user_id;
-        let org_id = userParams.org_id;
+        // let currentCognitoUserDetails = req.currentUser;
+        // let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
+        // let user_id = userParams.user_id;
+        // let org_id = userParams.org_id;
         const validDatas = validateUserDetailsUpdateData(req, next);
         logger.info("%s validparams got success response true: %s", getName().functionName, JSON.stringify(validDatas));
         if (validDatas.success) {
-            let userDetailsData = await userDetailsUpdateData(validDatas, user_id, org_id, next);
+            let userDetailsData = await userDetailsUpdateData(validDatas, next);
             if (userDetailsData) {
                 let responseData = formatResponseUserDetailsUpdateData(userDetailsData);
                 if (responseData.success) {

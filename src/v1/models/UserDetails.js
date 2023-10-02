@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../../../database/connection");
 module.exports = sequelize.define(
-    "User",
+    "UserDetails",
     {
         id: {
             allowNull: false,
@@ -9,12 +9,16 @@ module.exports = sequelize.define(
             primaryKey: true,
             type: Sequelize.INTEGER
         },
+        user_id: {
+            allowNull: false,
+            type: Sequelize.STRING
+        },
         address: {
             allowNull: false,
             type: Sequelize.STRING
         },
         img_url: {
-            allowNull: false,
+            allowNull: true,
             type: Sequelize.STRING
         },
         status: {
