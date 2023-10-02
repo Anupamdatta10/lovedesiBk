@@ -3,27 +3,24 @@ const { checkOpKeys } = require('../common/searchOpKeys');
 const logger = require('../../../logger/logger');
 const { getName } = require('../../../logger/logFunctionName');
 
-exports.validateStoreDetailsCreate = (req, next) => {
+exports.validateCuponsCreate = (req, next) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let data = req;
         let data_validate = {};
 
-        data_validate['catagory_id'] = Joi.number().required();
-        data_validate['address'] = Joi.string().required();
-        data_validate['lat'] = Joi.string().required();
-        data_validate['lng'] = Joi.string().required();
-        data_validate['img_url'] = Joi.object();
+        data_validate['name'] = Joi.string().required();
+        data_validate['cupon_code'] = Joi.string().required();
+        data_validate['description'] = Joi.string().required();
+        data_validate['price'] = Joi.string().required();
+        data_validate['price_type'] = Joi.string().required();
+        data_validate['start_date'] = Joi.date().iso().required()
+        data_validate['end_date'] = Joi.date().iso().required()
+        data_validate['min_price'] = Joi.string().required();
+        data_validate['max_price_allowed'] = Joi.string().required();
+        data_validate['status'] = Joi.string().required();
         let schemas = Joi.object().keys(data_validate);
         let validation = schemas.validate(data);
-        if (data.img_url) {
-            const next_schemas = Joi.object({
-                file_name: Joi.string().min(1).required(),
-                file_obj: Joi.string().min(1).required()
-            });
-            validation = next_schemas.validate(data.logo_img);
-        }
-       
         if (validation.error) {
             logger.error(`*** ${validation.error.details[0].message} in %s of %s ***`, getName().functionName, getName().fileName);
             return ({ "status": 400, "success": false, "message": validation.error.details[0].message });
@@ -38,7 +35,7 @@ exports.validateStoreDetailsCreate = (req, next) => {
     }
 }
 
-exports.formatResponseStoreDetailsCreateData = (params) => {
+exports.formatResponseCuponsCreateData = (params) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let result = {};
@@ -46,7 +43,7 @@ exports.formatResponseStoreDetailsCreateData = (params) => {
             result = {
                 "status": 200,
                 "success": true,
-                "message": "storeDetails created successfully",
+                "message": "cupons created successfully",
                 "data": params.data
             };
             logger.info("* Ending %s of %s *", getName().functionName, getName().fileName);
@@ -67,7 +64,7 @@ exports.formatResponseStoreDetailsCreateData = (params) => {
     }
 }
 
-exports.validateStoreDetailsListData = async (req, next) => {
+exports.validateCuponsListData = async (req, next) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let id = req.params.id || null;
@@ -114,7 +111,7 @@ exports.validateStoreDetailsListData = async (req, next) => {
     }
 };
 
-exports.formatResponeStoreDetailsListData = (params) => {
+exports.formatResponeCuponsListData = (params) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let result = {};
@@ -144,7 +141,7 @@ exports.formatResponeStoreDetailsListData = (params) => {
     }
 }
 
-exports.validateStoreDetailsUpdateData = (req, next) => {
+exports.validateCuponsUpdateData = (req, next) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let data = req.body;
@@ -156,25 +153,40 @@ exports.validateStoreDetailsUpdateData = (req, next) => {
         if (!id) {
             next({ "status": 400, "success": false, "message": "Id Is Required" });
         }
-        if (data.hasOwnProperty('catagory_id')) {
-            data_validate['catagory_id'] = Joi.number().min(1).required()
+        if (data.hasOwnProperty('name')) {
+            data_validate['name'] = Joi.string().min(1).required()
         }
-        if (data.hasOwnProperty('address')) {
-            data_validate['address'] = Joi.string().required()
+        if (data.hasOwnProperty('status')) {
+            data_validate['status'] = Joi.string().required()
         }
-        if (data.hasOwnProperty('lat')) {
-            data_validate['lat'] = Joi.allow()
+        if (data.hasOwnProperty('description')) {
+            data_validate['description'] = Joi.allow()
         }
-        if (data.hasOwnProperty('lng')) {
-            data_validate['lng'] = Joi.allow()
+        if (data.hasOwnProperty('cupon_code')) {
+            data_validate['cupon_code'] = Joi.allow()
         }
-        if (data.hasOwnProperty('img_url')) {
-            data_validate['img_url'] = Joi.object()
+        if (data.hasOwnProperty('price')) {
+            data_validate['price'] = Joi.allow()
+        }
+        if (data.hasOwnProperty('price_type')) {
+            data_validate['price_type'] = Joi.allow()
+        }
+        if (data.hasOwnProperty('start_date')) {
+            data_validate['start_date'] = Joi.date().iso().required()
+        }
+        if (data.hasOwnProperty('start_date')) {
+            data_validate['start_date'] = Joi.date().iso().required()
+        }
+        if (data.hasOwnProperty('min_price')) {
+            data_validate['min_price'] = Joi.allow()
+        }
+        if (data.hasOwnProperty('max_price_allowed')) {
+            data_validate['max_price_allowed'] = Joi.allow()
         }
         let schemas = Joi.object().keys(data_validate);
         let validation = schemas.validate(data);
         if (id) {
-            // console.log('validating',validation.error);
+            //console.log('validating',validation.error);
             if (validation.error) {
                 logger.error(`*** ${validation.error.details[0].message} in %s of %s ***`, getName().functionName, getName().fileName);
                 return ({ "status": 400, "success": false, "message": validation.error.details[0].message });
@@ -195,7 +207,7 @@ exports.validateStoreDetailsUpdateData = (req, next) => {
     }
 }
 
-exports.formatResponseStoreDetailsUpdateData = (params) => {
+exports.formatResponseCuponsUpdateData = (params) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let result = {};
@@ -224,7 +236,7 @@ exports.formatResponseStoreDetailsUpdateData = (params) => {
     }
 }
 
-exports.validateStoreDetailsDelete=(req,next)=>{
+exports.validateCuponsDelete=(req,next)=>{
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let data = req.body;
@@ -245,7 +257,7 @@ exports.validateStoreDetailsDelete=(req,next)=>{
         next({ "status": 500, "success": false, "message": "Something went wrong" });
     }
 }
-exports.formatResponseStoreDetailsDeleteData= (params) => {
+exports.formatResponseCuponsDeleteData= (params) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     let result = {};
     if (params.success) {

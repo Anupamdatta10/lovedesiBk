@@ -5,6 +5,7 @@ const userRouter = require('./users/userRouter');
 const userDetailsRouter = require('./users/userDetailsRouter');
 const storeDetailsRouter = require('./stores/storeDetails');
 const catagoryRouter = require('./catagory/catagoryRouter');
+const cuponRouter = require('./cupons/cuponsRouter');
 const { authenticate } = require('../controllers/middlewares/middlewareController');
 
 const adminUserRouter = require('./users/adminUserRouter');
@@ -25,6 +26,7 @@ router.use('/admin', authenticate, adminUserRouter);
 router.use('/store_details', storeDetailsRouter);
 router.use('/catagory', catagoryRouter);
 router.use('/users_details', userDetailsRouter);
+router.use('/cupons', cuponRouter);
 
 
 module.exports = router;
