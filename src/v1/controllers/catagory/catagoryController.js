@@ -1,26 +1,26 @@
 const {
-    validateStoreDetailsCreate, 
-    formatResponseStoreDetailsCreateData, 
-    validateStoreDetailsListData, 
-    formatResponeStoreDetailsListData, 
-    validateStoreDetailsUpdateData, 
-    formatResponseStoreDetailsUpdateData, 
-    validateStoreDetailsDelete, 
-    formatResponseStoreDetailsDeleteData
-} = require("../../helpers/store/storeDetailsHelper")
+    validateCatagoryCreate, 
+    formatResponseCatagoryCreateData, 
+    validateCatagoryListData, 
+    formatResponeCatagoryListData, 
+    validateCatagoryUpdateData, 
+    formatResponseCatagoryUpdateData, 
+    validateCatagoryDelete, 
+    formatResponseCatagoryDeleteData
+} = require("../../helpers/catagory/catagoryHelper")
 const {
-    StoreDetailsData, 
-    storeDetailsListData, 
-    storeDetailsUpdateData,
-    storeDetailsDeleteData
-} = require("../../models/queryModels/stores/storeDetails");
+    CatagoryData, 
+    CatagoryListData, 
+    CatagoryUpdateData,
+    CatagoryDeleteData
+} = require("../../models/queryModels/catagory/catagory");
 const logger = require('../../../logger/logger');
 const { getName } = require('../../../logger/logFunctionName');
 
 
 
 
-exports.storeDetailsCreateController = async (req, res, next) => {
+exports.catagoryCreateController = async (req, res, next) => {
     logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
     try {
         // const currentCognitoUserDetails = req.currentUser;
@@ -34,12 +34,12 @@ exports.storeDetailsCreateController = async (req, res, next) => {
                 let responseArr = [];
                 data.forEach(async reqData => {
                     
-                    const validData = validateStoreDetailsCreate(reqData, next);
+                    const validData = validateCatagoryCreate(reqData, next);
                     logger.info("%s validparams got success response true: %s", getName().functionName, JSON.stringify(validData));
                     if (validData.success) {
-                        let StoreDetails = await StoreDetailsData(validData, next);
-                        if (StoreDetails) {
-                            let responseData = formatResponseStoreDetailsCreateData(StoreDetails);
+                        let Catagory = await CatagoryData(validData, next);
+                        if (Catagory) {
+                            let responseData = formatResponseCatagoryCreateData(Catagory);
                             if (responseData.success == true) {
                                 var responseTrue = {
                                     "success": responseData.success,
@@ -92,19 +92,19 @@ exports.storeDetailsCreateController = async (req, res, next) => {
     }
 }
 
-exports.storeDetailsListController = async (req, res, next) => {
+exports.catagoryListController = async (req, res, next) => {
     logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
     try {
         // const currentCognitoUserDetails = req.currentUser;
         // let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
         // let currentUserId = userParams.user_id;
         // let org_id=userParams.org_id;
-        const validDatas = await validateStoreDetailsListData(req, next);
+        const validDatas = await validateCatagoryListData(req, next);
         logger.info("%s validparams got success response true: %s", getName().functionName, JSON.stringify(validDatas));
         if (validDatas.success) {
-            let StoreDetailsData = await storeDetailsListData(validDatas, next);
-            if (StoreDetailsData) {
-                let responseData = await formatResponeStoreDetailsListData(StoreDetailsData);
+            let CatagoryData = await CatagoryListData(validDatas, next);
+            if (CatagoryData) {
+                let responseData = await formatResponeCatagoryListData(CatagoryData);
                 if (responseData.success) {
                     var response = {
                         "success": responseData.success,
@@ -123,19 +123,19 @@ exports.storeDetailsListController = async (req, res, next) => {
     }
 }
 
-exports.storeDetailsUpdateController = async (req, res, next) => {
+exports.catagoryUpdateController = async (req, res, next) => {
     logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
     try {
         // let currentCognitoUserDetails = req.currentUser;
         // let userParams = JSON.parse(currentCognitoUserDetails['custom:user_details']);
         // let user_id = userParams.user_id;
         // let org_id = userParams.org_id;
-        const validDatas = validateStoreDetailsUpdateData(req, next);
+        const validDatas = validateCatagoryUpdateData(req, next);
         logger.info("%s validparams got success response true: %s", getName().functionName, JSON.stringify(validDatas));
         if (validDatas.success) {
-            let StoreDetailsData = await storeDetailsUpdateData(validDatas, next);
-            if (StoreDetailsData) {
-                let responseData = formatResponseStoreDetailsUpdateData(StoreDetailsData);
+            let CatagoryData = await CatagoryUpdateData(validDatas, next);
+            if (CatagoryData) {
+                let responseData = formatResponseCatagoryUpdateData(CatagoryData);
                 if (responseData.success) {
                     var response = {
                         "success": responseData.success,
@@ -171,17 +171,17 @@ exports.storeDetailsUpdateController = async (req, res, next) => {
 
 }
 
-exports.storeDetailsDeleteController = async (req, res, next) => {
+exports.catagoryDeleteController = async (req, res, next) => {
     try {
         logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
         // check if params are present
-        const validDatas = validateStoreDetailsDelete(req, next);
+        const validDatas = validateCatagoryDelete(req, next);
         logger.info("%s validparams got success response true: %s", getName().functionName, JSON.stringify(validDatas));
         if (validDatas.success) {
-            let Data = await storeDetailsDeleteData(validDatas, next);
+            let Data = await CatagoryDeleteData(validDatas, next);
            
             if (Data) {
-                let responseData = formatResponseStoreDetailsDeleteData(Data);
+                let responseData = formatResponseCatagoryDeleteData(Data);
                
                 if (responseData.success) {
                     var response = {

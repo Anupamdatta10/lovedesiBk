@@ -7,13 +7,20 @@ const s3 = require('../../../../common_modules/aws_s3');
 const EV = require('../../../../environment/index');
 
 
-exports.StoreDetailsData = async (params, next) => {
+exports.CatagoryData = async (params, next) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         params = params.data;
-        let results = await db.StoreDetails.create(params);
-        logger.info("*** Ending %s of %s ***", getName().functionName, getName().fileName);
-        return { success: true, data: results }
+        let dataExist = await db.Catagory.findOne({ where: { name: params.name } });
+        if (dataExist) {
+            logger.info("*** Ending %s of %s ***", getName().functionName, getName().fileName);
+            return { success: false, data: [], message: "already exist!","status": 400  }
+        } else {
+            let results = await db.Catagory.create(params);
+            logger.info("*** Ending %s of %s ***", getName().functionName, getName().fileName);
+            return { success: true, data: results }
+        }
+
     } catch (error) {
         logger.error("*** Error in %s of %s ***", getName().functionName, getName().fileName);
         logger.error(error.message || JSON.stringify(error));
@@ -24,7 +31,7 @@ exports.StoreDetailsData = async (params, next) => {
 };
 
 
-exports.storeDetailsListData = async (params, org_id, next) => {
+exports.CatagoryListData = async (params, org_id, next) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         params = params.data;
@@ -35,7 +42,7 @@ exports.storeDetailsListData = async (params, org_id, next) => {
         if (params.filter) {
             if (Object.keys(params.filter).length > 0) {
                 let filterKeys = Object.keys(params.filter);
-                let TemplateData = db.StoreDetails.rawAttributes;
+                let TemplateData = db.Catagory.rawAttributes;
                 TemplateData = Object.keys(TemplateData);
                 filterKeys.forEach(filterKey => {
                     if (TemplateData.includes(filterKey)) {
@@ -67,11 +74,11 @@ exports.storeDetailsListData = async (params, org_id, next) => {
             findAllData["offset"] = offset;
             findAllData["limit"] = limit;
         }
-        let result = await db.StoreDetails.findAll(findAllData);
+        let result = await db.Catagory.findAll(findAllData);
         if (!params.filter || (params.filter && (!params.filter.total || parseInt(params.filter.total) == 0))) {
             delete findAllData.offset;
             delete findAllData.limit;
-            let count = await db.StoreDetails.findAll(findAllData);
+            let count = await db.Catagory.findAll(findAllData);
             logger.info("*** Ending %s of %s ***", getName().functionName, getName().fileName);
             return ({ data: JSON.parse(JSON.stringify(result)), total: count.length, success: true });
         } else {
@@ -87,15 +94,15 @@ exports.storeDetailsListData = async (params, org_id, next) => {
 
 };
 
-exports.storeDetailsUpdateData = async (params, userId, org_id, next) => {
+exports.CatagoryUpdateData = async (params, userId, org_id, next) => {
     logger.info("*** Starting %s of %s ***", getName().functionName, getName().fileName);
     try {
         let id = params.id;
         params = params.data;
-        let dataExist = await db.StoreDetails.findOne({ where: { id: id } });
+        let dataExist = await db.Catagory.findOne({ where: { id: id } });
         if (dataExist != null) {
 
-            let results = await db.StoreDetails.update(params, { where: { id: id } });
+            let results = await db.Catagory.update(params, { where: { id: id } });
             if (results[0] == 0) {
                 logger.error("*** Error in %s of %s ***", getName().functionName, getName().fileName);
                 return ({ "message": "Update Can Not Be Performed", "success": false, "status": 405 })
@@ -117,14 +124,14 @@ exports.storeDetailsUpdateData = async (params, userId, org_id, next) => {
 
 }
 
-exports.storeDetailsDeleteData = async (params) => {
+exports.CatagoryDeleteData = async (params) => {
     logger.info("* Starting %s of %s *", getName().functionName, getName().fileName);
     try {
         var id = params.data.id;
         var _arr = [];
         var count = 0;
         for (var i = 0; i < id.length; i++) {
-            var dataExists = await db.StoreDetails.findOne({
+            var dataExists = await db.Catagory.findOne({
                 where: { id: id[i] }
             });
             if (dataExists == null) {
@@ -136,13 +143,13 @@ exports.storeDetailsDeleteData = async (params) => {
                 count = count + 1;
             } else {
                 dataExists = JSON.parse(JSON.stringify(dataExists));
-                var result = await db.StoreDetails.destroy({
+                var result = await db.Catagory.destroy({
                     where: { id: id[i] }
                 });
                 if (result > 0) {
                     var _hash = { "success": true };
                     _hash["data"] = { "id": id[i] };
-                    _hash["message"] = `store deleted successfully`;
+                    _hash["message"] = `catagory deleted successfully`;
                     _arr.push(_hash);
                 } else {
                     logger.error("* Error in %s of %s *", getName().functionName, getName().fileName);

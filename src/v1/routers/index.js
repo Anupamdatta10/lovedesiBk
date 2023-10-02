@@ -3,6 +3,7 @@ const router = express.Router();
 
 const userRouter = require('./users/userRouter');
 const storeDetailsRouter = require('./stores/storeDetails');
+const catagoryRouter = require('./catagory/catagoryRouter');
 const { authenticate } = require('../controllers/middlewares/middlewareController');
 
 const adminUserRouter = require('./users/adminUserRouter');
@@ -19,8 +20,9 @@ router.use((req, res, next) => {
 });
 
 router.use('/users', userRouter);
-router.use('/admin', authenticate, storeDetailsRouter);
-router.use('/store', authenticate, adminUserRouter);
+router.use('/admin', authenticate, adminUserRouter);
+router.use('/store_details', storeDetailsRouter);
+router.use('/catagory', catagoryRouter);
 
 
 module.exports = router;
