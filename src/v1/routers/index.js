@@ -4,6 +4,7 @@ const router = express.Router();
 const userRouter = require('./users/userRouter');
 const userDetailsRouter = require('./users/userDetailsRouter');
 const storeDetailsRouter = require('./stores/storeDetails');
+const bookingDetailsRouter = require('./booking/bookingDetailsRouter');
 const catagoryRouter = require('./catagory/catagoryRouter');
 const cuponRouter = require('./cupons/cuponsRouter');
 const { authenticate } = require('../controllers/middlewares/middlewareController');
@@ -27,6 +28,7 @@ router.use('/store_details', storeDetailsRouter);
 router.use('/catagory', catagoryRouter);
 router.use('/users_details', userDetailsRouter);
 router.use('/cupons', cuponRouter);
+router.use('/booking', bookingDetailsRouter);
 
 
 module.exports = router;
